@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Beranda{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4">Data Science Cipher Hunt</h1>
+    <p class="lead">Mulai petualanganmu memecahkan sandi!</p>
+
+    <ol class="text-start mx-auto" style="max-width: 420px;">
+        <li>Hangman – Tebak istilah data science untuk mendapatkan key-nya!</li>
+        <li>Cipher – Pecahkan sandi acak</li>
+        <li>Lihat pesan rahasianya</li>
+    </ol>
+
+    <a href="{{ url_for('hangman') }}" class="btn btn-primary btn-lg mt-3">
+        Mulai Game
+    </a>
+</div>
+{% endblock %}

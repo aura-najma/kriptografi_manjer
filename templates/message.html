@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Pesan Rahasia{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="mb-4">🔓 Pesan Rahasia Terbuka</h2>
+
+    <div class="alert alert-success fs-5">
+        {{ plaintext }}
+    </div>
+
+    <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Kembali ke Beranda</a>
+</div>
+{% endblock %}
