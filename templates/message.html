@@ -3,12 +3,19 @@
 
 {% block content %}
 <div class="text-center">
-    <h2 class="mb-4">🔓 Pesan Rahasia Terbuka</h2>
 
-    <div class="alert alert-success fs-5">
-        {{ plaintext }}
+    <h1 class="mb-3">🎉 Congratulations! 🎉</h1>
+    <h4 class="mb-4 text-success">🔓 Pesan Rahasia Terbuka</h4>
+
+    <div class="card bg-secondary text-light mx-auto" style="max-width: 600px;">
+        <div class="card-body fs-5">
+            <p class="mb-0">{{ message }}</p>
+        </div>
     </div>
 
-    <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Kembali ke Beranda</a>
+    <a href="{{ url_for('home') }}" class="btn btn-primary mt-4">
+        Kembali ke Beranda
+    </a>
+
 </div>
 {% endblock %}

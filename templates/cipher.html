@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Cipher{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Nihilist Cipher</h2>
+
+<div class="card bg-secondary text-light">
+  <div class="card-body">
+
+    <p class="mb-1"><strong>Key:</strong> {{ key }}</p>
+    <p class="mb-3">
+      <strong>Clue:</strong>
+      <code>ABCDEFGHIKLMNOPQRSTUVWXYZ</code>
+    </p>
+
+    <!-- Box berisi teks cipher -->
+    <div class="box my-3 mx-auto" id="mystery-box"
+         style="width: {{ width }}px; height: {{ height }}px;">
+      <p class="box-text mb-0">
+        {{ cipher_text }}
+      </p>
+    </div>
+
+    <!-- Error messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div class="alert alert-danger py-2 mb-2">
+            {{ m }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Form password -->
+    <form method="POST" class="mt-3">
+      <div class="mb-3">
+        <label for="password" class="form-label">Input Password</label>
+        <input type="text"
+               id="password"
+               name="password"
+               class="form-control"
+               autocomplete="off"
+               required>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .box {
+    background-color: #cccccc;
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  .box-text {
+    font-size: 0.95rem;
+    word-wrap: break-word;
+    max-width: 100%;
+    color: #000; /* biar kontras di background abu-abu */
+  }
+</style>
+{% endblock %}
