@@ -1,29 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Hangman{% endblock %}
+{% block title %}Ancient Game - Hangman{% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4">Data Science Hangman</h2>
+<div class="puzzle-screen">
+    <div class="puzzle-layout one-col">
+        <section class="puzzle-main" id="game-area">
+            <h2 class="puzzle-title">DATA SCIENCE HANGMAN</h2>
+            <p class="puzzle-sub">
+                Tebak kata berkaitan dengan data science (clue: bahasa inggris).
+            </p>
 
-<div class="card bg-secondary text-light p-4">
+            <div class="puzzle-info-row">
+                <div class="puzzle-info-item">
+                    <span class="puzzle-info-label">Nyawa</span>
+                    <span class="puzzle-info-value" id="lives">3</span>
+                </div>
+            </div>
 
-    <div class="d-flex justify-content-between mb-2">
-        <div>Nyawa: <span id="lives"></span></div>
-        <div>Salah: <span id="wrong-count"></span>/6</div>
+            <div class="puzzle-box hangman-word" id="word-container">
+            </div>
+
+            <div class="puzzle-subinfo-row">
+                <span>Salah: <span id="wrong-count">0</span>/6</span>
+                <span>Huruf terpakai: <span id="used-letters"></span></span>
+            </div>
+
+            <div class="puzzle-input-row">
+                <input
+                    id="letter-input"
+                    maxlength="1"
+                    class="puzzle-input"
+                    placeholder="Masukkan huruf (a-z)">
+                <button id="guess-button" class="btn-primary puzzle-submit">
+                    Tebak
+                </button>
+            </div>
+
+            <div class="puzzle-message" id="message"></div>
+        </section>
     </div>
-
-    <hr>
-
-    <div id="word-container" class="fs-2 text-center mb-3"></div>
-
-    <div id="used-letters" class="text-center mb-3 small text-uppercase"></div>
-
-    <div class="input-group mb-3">
-        <input id="letter-input" maxlength="1" class="form-control" placeholder="Masukkan huruf (a-z)">
-        <button id="guess-button" class="btn btn-primary">Tebak</button>
-    </div>
-
-    <div id="message" class="text-center fw-semibold"></div>
-
 </div>
 {% endblock %}
 
@@ -83,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         guessedLetters.clear();
         wrongGuesses = 0;
         updateUI();
-        setMessage("Tebak kata berkaitan dengan data science (clue: bahasa inggris).");
+        setMessage("");
     }
 
     function updateUI() {
@@ -103,11 +118,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         wordContainer.textContent = displayChars.join(" ");
 
+        // tampilan huruf terpakai (biar label HTML "Huruf terpakai:" tetap kepakai)
         if (guessedLetters.size > 0) {
             const used = Array.from(guessedLetters).sort().join(" ");
-            usedLettersDiv.textContent = "Huruf yang sudah dicoba: " + used.toUpperCase();
+            usedLettersDiv.textContent = used.toUpperCase();
         } else {
-            usedLettersDiv.textContent = "Belum ada huruf yang dicoba.";
+            usedLettersDiv.textContent = "-";
         }
     }
 
@@ -148,10 +164,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             body: formData.toString()
-        }).then(function () {
+        })
+        .then(function (res) {
+            // cek status HTTP
+            if (!res.ok) {
+                throw new Error("Server error: " + res.status);
+            }
+            // kalau sukses, baru pindah halaman
             window.location.href = "{{ url_for('cipher') }}";
-        }).catch(function () {
-            setMessage("Gagal mengirim kata ke server. Coba refresh halaman.", "error");
+        })
+        .catch(function (err) {
+            console.error(err);
+            // penting: balikin lagi biar user bisa mencoba lagi
+            alreadySentToServer = false;
+            setMessage("Gagal mengirim kata ke server. Coba lagi atau refresh halaman.", "error");
         });
     }
 
@@ -195,7 +221,9 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (wrongGuesses >= MAX_WRONG) {
             // Kalah untuk kata ini
             lives -= 1;
+
             if (lives > 0) {
+                updateUI();
                 setMessage(
                     "Kamu kehabisan percobaan untuk kata: " + currentWord +
                     ". Nyawa berkurang 1. Kata baru muncul!", "error"
@@ -205,13 +233,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 1500);
             } else {
                 // Game over total
-                // Game over total
+                updateUI(); // biar nyawa tampil 0 di UI
                 setMessage(
                     "Game over. Nyawa habis.",
                     "error"
                 );
                 endGame();
-
             }
         }
     }

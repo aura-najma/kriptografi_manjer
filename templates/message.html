@@ -2,20 +2,25 @@
 {% block title %}Pesan Rahasia{% endblock %}
 
 {% block content %}
-<div class="text-center">
+<div class="puzzle-screen">
+    <div class="puzzle-layout one-col">
+        <section class="puzzle-main">
 
-    <h1 class="mb-3">🎉 Congratulations! 🎉</h1>
-    <h4 class="mb-4 text-success">🔓 Pesan Rahasia Terbuka</h4>
+            <h1 class="mb-3">Pesan Rahasia Terbuka</h1>
+            
+            <div class="secret-message-wrapper">
+                <div class="secret-message-paper">
+                    <p class="secret-message-body">
+                        {{ message }}
+                    </p>
+                </div>
 
-    <div class="card bg-secondary text-light mx-auto" style="max-width: 600px;">
-        <div class="card-body fs-5">
-            <p class="mb-0">{{ message }}</p>
-        </div>
+                <a href="{{ url_for('home') }}" class="btn-primary secret-message-btn">
+                    Kembali ke Beranda
+                </a>
+            </div>
+
+        </section>
     </div>
-
-    <a href="{{ url_for('home') }}" class="btn btn-primary mt-4">
-        Kembali ke Beranda
-    </a>
-
 </div>
 {% endblock %}
